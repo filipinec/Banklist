@@ -1,15 +1,21 @@
-'use strict';
-
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-// BANKIST APP
-
-// Data
 const account1 = {
   owner: 'Jonas Schmedtmann',
-  movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
+  movements: [200, 455.23, -306.5, 25000, -642.21, -133.9, 79.97, 1300],
   interestRate: 1.2, // %
   pin: 1111,
+
+  movementsDates: [
+    '2019-11-18T21:31:17.178Z',
+    '2019-12-23T07:42:02.383Z',
+    '2020-01-28T09:15:04.904Z',
+    '2020-04-01T10:17:24.185Z',
+    '2020-05-08T14:11:59.604Z',
+    '2020-05-27T17:01:17.194Z',
+    '2020-07-11T23:36:17.929Z',
+    '2020-07-12T10:51:36.790Z',
+  ],
+  currency: 'EUR',
+  locale: 'pt-PT', // de-DE
 };
 
 const account2 = {
@@ -17,23 +23,22 @@ const account2 = {
   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
   interestRate: 1.5,
   pin: 2222,
+
+  movementsDates: [
+    '2019-11-01T13:15:33.035Z',
+    '2019-11-30T09:48:16.867Z',
+    '2019-12-25T06:04:23.907Z',
+    '2020-01-25T14:18:46.235Z',
+    '2020-02-05T16:33:06.386Z',
+    '2020-04-10T14:43:26.374Z',
+    '2020-06-25T18:49:59.371Z',
+    '2020-07-26T12:01:20.894Z',
+  ],
+  currency: 'USD',
+  locale: 'en-US',
 };
 
-const account3 = {
-  owner: 'Steven Thomas Williams',
-  movements: [200, -200, 340, -300, -20, 50, 400, -460],
-  interestRate: 0.7,
-  pin: 3333,
-};
-
-const account4 = {
-  owner: 'Sarah Smith',
-  movements: [430, 1000, 700, 50, 90],
-  interestRate: 1,
-  pin: 4444,
-};
-
-const accounts = [account1, account2, account3, account4];
+const accounts = [account1, account2];
 
 // Elements
 const labelWelcome = document.querySelector('.welcome');
@@ -162,7 +167,7 @@ btnTransfer.addEventListener('click', function (e) {
 
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
-  const loanAmount = Number(inputLoanAmount.value);
+  const loanAmount = Math.floor(inputLoanAmount.value);
 
   // Loan can be 10 % of high value deposit in array // If we have deposit max of 25 000 we can loan max 250 000
   const amount = currentAccount.movements.some(mov => mov >= loanAmount * 0.1);
@@ -193,7 +198,7 @@ const dispayMovements = function (movements, sort = false) {
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-        <div class="movements__value">${mov}€</div>
+        <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>`;
 
     containerMovements.insertAdjacentHTML('afterbegin', html); // new Method to add new html element (where to put, what element to put)/ USE: afterbegin / beforeend
@@ -208,7 +213,7 @@ const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce(function (acc, cur) {
     return acc + cur;
   }, 0);
-  labelBalance.textContent = `${acc.balance}€`;
+  labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
 };
 
 //////////////////////////////////////////////////
@@ -220,13 +225,13 @@ const calcDisplaySummary = function (movements) {
   const incomes = movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${incomes}€`;
+  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
 
   // Calculation and display Out of Money
   const out = movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(out)}€`;
+  labelSumOut.textContent = `${Math.abs(out).toFixed(2)}€`;
 
   // Calculation and display Interest
   const interest = movements
@@ -235,7 +240,7 @@ const calcDisplaySummary = function (movements) {
     .filter(int => int >= 1)
 
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumInterest.textContent = `${interest}€`;
+  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
 };
 
 //Computing Usernames
@@ -262,3 +267,86 @@ btnSort.addEventListener('click', function (e) {
   dispayMovements(currentAccount.movements, !sorted);
   sorted = !sorted; //Using for change movement (sorted / non sorted)
 });
+
+////////////////////////////////////////////
+
+// // Lectures
+
+// // Converting and checking numbers
+
+// console.log(23 === 23.0); // Result: True
+// console.log(0.1 + 0.2 === 0.3); // Result: False
+
+// //Convert String to Number
+// console.log(Number('23'));
+// //Short way to converts string to number
+// console.log(+'23');
+
+// //PARSING
+// //Using parseInt
+// console.log(Number.parseInt('30px')); //Result: 30
+// console.log(Number.parseInt('e30')); //Result: Nan (not work - only if first element is a number)
+
+// //Using parseFloat
+// console.log(Number.parseInt('2.5rem')); // Result: 2 - only whole num.
+// console.log(Number.parseFloat('2.5rem')); // Result: 2.5 all num.
+
+// // isNan - check if value is Nan
+// console.log(Number.isNaN(20)); // Result: false - Number
+// console.log(Number.isNaN('20')); // Result: false - String
+// console.log(Number.isNaN(+'20X')); // Result: true - Nan
+// console.log(Number.isNaN(23 / 0)); // Result: false - infinity
+
+// //isFinite - check if value is number
+// console.log(Number.isFinite(20)); // Result: true
+// console.log(Number.isFinite('20')); // Result: false
+
+// // isInteger - check if value is number
+// console.log(Number.isInteger(23)); // Result: true
+// console.log(Number.isInteger(23.0)); // Result: true
+// console.log(Number.isInteger(23 / 0)); // Result: false
+
+///////////////////////////////////////
+
+// Math and Rounding
+
+// Square
+console.log(Math.sqrt(25)); // Result: 5
+console.log(25 ** (1 / 2)); // Result: 5
+
+// Max value
+console.log(Math.max(5, 7, 1, 23, 11, 2)); // Result: 23
+console.log(Math.max(5, 7, 1, '23', 11, 2)); // Result: 23
+console.log(Math.max(5, 7, 1, '23px', 11, 2)); // Result: NaN
+
+// Min value
+console.log(Math.min(5, 7, 1, 23, 11, 2)); // Result: 1
+
+// PI
+console.log(Math.PI);
+
+// Ramdom number
+console.log(Math.random()); // Result: 0 - 1
+console.log(Math.trunc(1.5)); // Result: 1
+
+//Create function with random number between 0 and 20
+const randomInt = (min, max) =>
+  Math.trunc(Math.random() * (max - min) + 1) + min;
+console.log(randomInt(15, 20));
+
+// Rounding integers
+console.log(Math.trunc(23.3)); // Result: 23
+console.log(Math.trunc(23.9)); // Result: 23
+
+console.log(Math.ceil(23.3)); // Result: 24
+console.log(Math.ceil(23.9)); // Result: 24
+
+console.log(Math.round(23.3)); // Result: 23
+console.log(Math.round(23.9)); // Result: 24
+
+console.log(Math.trunc(-23.3)); // Result: 24
+console.log(Math.floor(-23.3)); // Result: 24 better optiom
+
+// Rounding decimals
+console.log((2.7).toFixed(0)); // Result: 3
+console.log((2.745643).toFixed(2)); // Result: 2.75
