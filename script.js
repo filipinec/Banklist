@@ -67,23 +67,104 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 ////////////////////////////////////////
+// Create DOM Elements
+
+//Creat function for Display Movementrs
+const displayMovements = function (movements, sort = false) {
+  containerMovements.innerHTML = ''; // Remove old elements from html also can use textContent = ''
+  //Sorting the movements in ascending
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach(function (mov, i) {
+    //Create logic if value is greater than 0 is deposit or if is less than is withdrawal
+    const type = mov > 0 ? 'deposit' : 'withdrawal';
+    const html = `
+      <div class="movements__row">
+        <div class="movements__type movements__type--${type}">${
+      i + 1
+    } ${type}</div>
+        <div class="movements__value">${mov.toFixed(2)}€</div>
+      </div>`;
+
+    containerMovements.insertAdjacentHTML('afterbegin', html); // new Method to add new html element (where to put, what element to put)/ USE: afterbegin / beforeend
+  });
+};
+// Calculating and print balance
+
+const calcDisplayBalance = function (acc) {
+  acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${acc.balance}€`;
+};
+//Calculation and display the incumes out and interest
+const calcDisplaySummary = function (acc) {
+  // Calculation and display Incumes of Money
+  const incomes = acc.movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
+
+  // Calculation and display Out of Money
+  const out = acc.movements
+    .filter(mov => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumOut.textContent = `${Math.abs(out).toFixed(2)}€`;
+
+  // Calculation and display Interest
+  const interest = acc.movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * acc.interestRate) / 100)
+    .filter(int => int >= 1)
+
+    .reduce((acc, int) => acc + int, 0);
+  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
+};
+//Computing Usernames
+//Create function for username
+const createUsernames = function (accs) {
+  //Create ne property in object
+  accs.forEach(function (acc) {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(function (name) {
+        return name[0];
+      })
+      .join('');
+  });
+};
+createUsernames(accounts);
 
 // Update UI
 
-const updateUI = function () {
+const updateUI = function (acc) {
   //Display movements
-  dispayMovements(currentAccount.movements);
+  displayMovements(acc.movements);
 
   //Display balance
-  calcDisplayBalance(currentAccount);
+  calcDisplayBalance(acc);
 
   //Display summary
-  calcDisplaySummary(currentAccount.movements);
+  calcDisplaySummary(acc);
 };
+
 // Event handlers
 
 let currentAccount;
 
+//FAKE ALWAYS LOGGED IN
+currentAccount = account1;
+updateUI(currentAccount);
+containerApp.style.opacity = 100;
+
+//Dates
+const dateNow = new Date();
+const day = `${dateNow.getDate()}`.padStart(2, '0');
+const month = `${dateNow.getMonth() + 1}`.padStart(2, '0');
+const year = dateNow.getFullYear();
+const hour = dateNow.getHours();
+const min = dateNow.getMinutes();
+
+labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
 btnLogin.addEventListener('click', function (e) {
   //Prevent form from submiting
   e.preventDefault();
@@ -105,30 +186,6 @@ btnLogin.addEventListener('click', function (e) {
     // Update UI
     updateUI(currentAccount);
   }
-});
-
-// Account close - findIndex Method
-btnClose.addEventListener('click', function (e) {
-  e.preventDefault(); // prevent default
-  const usernameClose = inputCloseUsername.value;
-  const passwordClose = Number(inputClosePin.value);
-
-  //Create Logic
-  if (
-    usernameClose === currentAccount.username &&
-    passwordClose === currentAccount.pin
-  ) {
-    const index = accounts.findIndex(
-      acc => acc.username === currentAccount.username
-    );
-    // Delete account
-    accounts.splice(index, 1);
-    // Hide UI
-    containerApp.style.opacity = 0;
-  }
-
-  //Clear fields
-  inputCloseUsername.value = inputClosePin.value = '';
 });
 
 /////////////////////////////////////////////
@@ -182,85 +239,29 @@ btnLoan.addEventListener('click', function (e) {
   inputLoanAmount.value = '';
 });
 
-// Create DOM Elements
+// Account close - findIndex Method
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault(); // prevent default
+  const usernameClose = inputCloseUsername.value;
+  const passwordClose = Number(inputClosePin.value);
 
-//Creat function for Display Movementrs
-const dispayMovements = function (movements, sort = false) {
-  containerMovements.innerHTML = ''; // Remove old elements from html also can use textContent = ''
-  //Sorting the movements in ascending
-  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+  //Create Logic
+  if (
+    usernameClose === currentAccount.username &&
+    passwordClose === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+    // Delete account
+    accounts.splice(index, 1);
+    // Hide UI
+    containerApp.style.opacity = 0;
+  }
 
-  movs.forEach(function (mov, i) {
-    //Create logic if value is greater than 0 is deposit or if is less than is withdrawal
-    const type = mov > 0 ? 'deposit' : 'withdrawal';
-    const html = `
-      <div class="movements__row">
-        <div class="movements__type movements__type--${type}">${
-      i + 1
-    } ${type}</div>
-        <div class="movements__value">${mov.toFixed(2)}€</div>
-      </div>`;
-
-    containerMovements.insertAdjacentHTML('afterbegin', html); // new Method to add new html element (where to put, what element to put)/ USE: afterbegin / beforeend
-  });
-};
-
-/////////////////////////////////////////////
-
-// Calculating and print balance
-
-const calcDisplayBalance = function (acc) {
-  acc.balance = acc.movements.reduce(function (acc, cur) {
-    return acc + cur;
-  }, 0);
-  labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
-};
-
-// Display date
-const dateNow = new Date();
-console.log(dateNow);
-//////////////////////////////////////////////////
-
-//Calculation and display the incumes out and interest
-
-const calcDisplaySummary = function (movements) {
-  // Calculation and display Incumes of Money
-  const incomes = movements
-    .filter(mov => mov > 0)
-    .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
-
-  // Calculation and display Out of Money
-  const out = movements
-    .filter(mov => mov < 0)
-    .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(out).toFixed(2)}€`;
-
-  // Calculation and display Interest
-  const interest = movements
-    .filter(mov => mov > 0)
-    .map(deposit => (deposit * currentAccount.interestRate) / 100)
-    .filter(int => int >= 1)
-
-    .reduce((acc, mov) => acc + mov, 0);
-  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
-};
-
-//Computing Usernames
-//Create function for username
-const createUsernames = function (accs) {
-  //Create ne property in object
-  accs.forEach(function (acc) {
-    acc.username = acc.owner
-      .toLowerCase()
-      .split(' ')
-      .map(function (name) {
-        return name[0];
-      })
-      .join('');
-  });
-};
-createUsernames(accounts);
+  //Clear fields
+  inputCloseUsername.value = inputClosePin.value = '';
+});
 
 // Sorting  movements
 let sorted = false;
@@ -270,6 +271,8 @@ btnSort.addEventListener('click', function (e) {
   dispayMovements(currentAccount.movements, !sorted);
   sorted = !sorted; //Using for change movement (sorted / non sorted)
 });
+
+/////////////////////////////////////////////
 
 ////////////////////////////////////////////
 
