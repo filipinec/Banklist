@@ -80,7 +80,7 @@ const updateUI = function () {
   //Display summary
   calcDisplaySummary(currentAccount.movements);
 };
-// Event handler
+// Event handlers
 
 let currentAccount;
 
@@ -216,6 +216,9 @@ const calcDisplayBalance = function (acc) {
   labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
 };
 
+// Display date
+const dateNow = new Date();
+console.log(dateNow);
 //////////////////////////////////////////////////
 
 //Calculation and display the incumes out and interest
@@ -388,31 +391,31 @@ btnSort.addEventListener('click', function (e) {
 
 //////////////////////////////////////////////////////////
 
-// Creating Dates
+// // Creating Dates
 
-// Create a date
-const now = new Date();
-console.log(now);
-console.log(new Date('Dec 22 2023 19:39:14'));
-console.log(new Date(account1.movementsDates[0]));
-console.log(new Date(2037, 10, 19, 15, 23, 5)); // (Year, Month, Day, Hours, Minutes, Seconds)
-console.log(new Date(0)); // Base day
-console.log(new Date(3 * 24 * 60 * 60 * 1000)); // 3days * 24hours * 60min * 60sec * 1000(ms)
+// // Create a date
+// const now = new Date();
+// console.log(now);
+// console.log(new Date('Dec 22 2023 19:39:14'));
+// console.log(new Date(account1.movementsDates[0]));
+// console.log(new Date(2037, 10, 19, 15, 23, 5)); // (Year, Month, Day, Hours, Minutes, Seconds)
+// console.log(new Date(0)); // Base day
+// console.log(new Date(3 * 24 * 60 * 60 * 1000)); // 3days * 24hours * 60min * 60sec * 1000(ms)
 
-console.log('---------------');
-// Working with dates
-const future = new Date(2037, 10, 19, 15, 23);
-console.log(future);
-console.log(future.getFullYear()); //Result: 2037
-console.log(future.getMonth()); //Result: 10
-console.log(future.getDate()); //Result: 19
-console.log(future.getDay()); //Result: 4 (day of the week)
-console.log(future.getHours()); //Result: 15
-console.log(future.getMinutes()); //Result: 23
-console.log(future.getSeconds()); //Result: 0
-console.log(future.toISOString()); //Result: 2037-11-19T14:23:00.000Z
-console.log(future.getTime()); //Result: 2142253380000
-console.log(new Date(2142253380000)); // Thu Nov 19 2037 15:23:00 GMT+0100 (Central European Standard Time)
-console.log(Date.now()); // Time now in ms
+// console.log('---------------');
+// // Working with dates
+// const future = new Date(2037, 10, 19, 15, 23);
+// console.log(future);
+// console.log(future.getFullYear()); //Result: 2037
+// console.log(future.getMonth()); //Result: 10
+// console.log(future.getDate()); //Result: 19
+// console.log(future.getDay()); //Result: 4 (day of the week)
+// console.log(future.getHours()); //Result: 15
+// console.log(future.getMinutes()); //Result: 23
+// console.log(future.getSeconds()); //Result: 0
+// console.log(future.toISOString()); //Result: 2037-11-19T14:23:00.000Z
+// console.log(future.getTime()); //Result: 2142253380000
+// console.log(new Date(2142253380000)); // Thu Nov 19 2037 15:23:00 GMT+0100 (Central European Standard Time)
+// console.log(Date.now()); // Time now in ms
 
-future.setFullYear(2040); // We change the year(Also have date, min, hour...)
+// future.setFullYear(2040); // We change the year(Also have date, min, hour...)
