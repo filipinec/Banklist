@@ -350,3 +350,38 @@ btnSort.addEventListener('click', function (e) {
 // // Rounding decimals
 // console.log((2.7).toFixed(0)); // Result: 3
 // console.log((2.745643).toFixed(2)); // Result: 2.75
+
+///////////////////////////////////////////////////
+
+// The remainder operator
+
+console.log(5 % 2); // Result: 1 (5 / 2 = 2.5 or 2 and ramainder 1)
+console.log(8 % 3); // Result: 2
+
+console.log(6 % 2);
+
+//Check if number is even or odd
+const checkNum = function (num) {
+  const number = num % 2;
+  if (number === 0) {
+    console.log(`${num} is even number `);
+  } else {
+    console.log(`${num} is odd number `);
+  }
+};
+
+checkNum(567); // Result: 567 is odd number
+checkNum(256); // Result: 256 is even number
+
+// Example - color gray every even movement
+labelBalance.addEventListener('click', function () {
+  [...document.querySelectorAll('.movements__row')].forEach(function (row, i) {
+    if (i % 2 === 0) {
+      row.style.backgroundColor = '#D3D3D3';
+    }
+    // Every 3 movement color in dark grey
+    if (i % 3 === 0) {
+      row.style.backgroundColor = '#9E9E9E';
+    }
+  });
+});
