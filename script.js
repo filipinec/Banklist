@@ -310,43 +310,43 @@ btnSort.addEventListener('click', function (e) {
 
 // Math and Rounding
 
-// Square
-console.log(Math.sqrt(25)); // Result: 5
-console.log(25 ** (1 / 2)); // Result: 5
+// // Square
+// console.log(Math.sqrt(25)); // Result: 5
+// console.log(25 ** (1 / 2)); // Result: 5
 
-// Max value
-console.log(Math.max(5, 7, 1, 23, 11, 2)); // Result: 23
-console.log(Math.max(5, 7, 1, '23', 11, 2)); // Result: 23
-console.log(Math.max(5, 7, 1, '23px', 11, 2)); // Result: NaN
+// // Max value
+// console.log(Math.max(5, 7, 1, 23, 11, 2)); // Result: 23
+// console.log(Math.max(5, 7, 1, '23', 11, 2)); // Result: 23
+// console.log(Math.max(5, 7, 1, '23px', 11, 2)); // Result: NaN
 
-// Min value
-console.log(Math.min(5, 7, 1, 23, 11, 2)); // Result: 1
+// // Min value
+// console.log(Math.min(5, 7, 1, 23, 11, 2)); // Result: 1
 
-// PI
-console.log(Math.PI);
+// // PI
+// console.log(Math.PI);
 
-// Ramdom number
-console.log(Math.random()); // Result: 0 - 1
-console.log(Math.trunc(1.5)); // Result: 1
+// // Ramdom number
+// console.log(Math.random()); // Result: 0 - 1
+// console.log(Math.trunc(1.5)); // Result: 1
 
-//Create function with random number between 0 and 20
-const randomInt = (min, max) =>
-  Math.trunc(Math.random() * (max - min) + 1) + min;
-console.log(randomInt(15, 20));
+// //Create function with random number between 0 and 20
+// const randomInt = (min, max) =>
+//   Math.trunc(Math.random() * (max - min) + 1) + min;
+// console.log(randomInt(15, 20));
 
-// Rounding integers
-console.log(Math.trunc(23.3)); // Result: 23
-console.log(Math.trunc(23.9)); // Result: 23
+// // Rounding integers
+// console.log(Math.trunc(23.3)); // Result: 23
+// console.log(Math.trunc(23.9)); // Result: 23
 
-console.log(Math.ceil(23.3)); // Result: 24
-console.log(Math.ceil(23.9)); // Result: 24
+// console.log(Math.ceil(23.3)); // Result: 24
+// console.log(Math.ceil(23.9)); // Result: 24
 
-console.log(Math.round(23.3)); // Result: 23
-console.log(Math.round(23.9)); // Result: 24
+// console.log(Math.round(23.3)); // Result: 23
+// console.log(Math.round(23.9)); // Result: 24
 
-console.log(Math.trunc(-23.3)); // Result: 24
-console.log(Math.floor(-23.3)); // Result: 24 better optiom
+// console.log(Math.trunc(-23.3)); // Result: 24
+// console.log(Math.floor(-23.3)); // Result: 24 better optiom
 
-// Rounding decimals
-console.log((2.7).toFixed(0)); // Result: 3
-console.log((2.745643).toFixed(2)); // Result: 2.75
+// // Rounding decimals
+// console.log((2.7).toFixed(0)); // Result: 3
+// console.log((2.745643).toFixed(2)); // Result: 2.75
