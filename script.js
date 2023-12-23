@@ -444,3 +444,26 @@ btnSort.addEventListener('click', function (e) {
 // console.log(Date.now()); // Time now in ms
 
 // future.setFullYear(2040); // We change the year(Also have date, min, hour...)
+
+///////////////////////////////////////
+
+// Operation with dates
+
+const bornDay = new Date(1995, 1, 7, 10, 10);
+const today = new Date();
+
+// const mS = today.getTime() - bornDay.getTime();
+// const years = mS / (365 * 24 * 60 * 60 * 1000);
+// console.log(bornDay);
+// console.log(today);
+// console.log(years);
+
+// Other way
+
+const dayPassed = function (bornDay, today) {
+  const ms = today.getTime() - bornDay.getTime();
+  const days = ms / (24 * 60 * 60 * 1000);
+  return days;
+};
+
+console.log(dayPassed(bornDay, today));
