@@ -70,19 +70,29 @@ const inputClosePin = document.querySelector('.form__input--pin');
 // Create DOM Elements
 
 //Creat function for Display Movementrs
-const displayMovements = function (movements, sort = false) {
+const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = ''; // Remove old elements from html also can use textContent = ''
   //Sorting the movements in ascending
-  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+  const movs = sort
+    ? acc.movements.slice().sort((a, b) => a - b)
+    : acc.movements;
 
   movs.forEach(function (mov, i) {
     //Create logic if value is greater than 0 is deposit or if is less than is withdrawal
     const type = mov > 0 ? 'deposit' : 'withdrawal';
+
+    //Display date in movements
+    const displayDate = new Date(acc.movementsDates[i]);
+    const day = `${displayDate.getDate()}`.padStart(2, '0');
+    const month = `${displayDate.getMonth() + 1}`.padStart(2, '0');
+    const year = displayDate.getFullYear();
+
     const html = `
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
+        <div class="movements__date">${day}/${month}/${year}/</div>
         <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>`;
 
@@ -92,6 +102,7 @@ const displayMovements = function (movements, sort = false) {
 // Calculating and print balance
 
 const calcDisplayBalance = function (acc) {
+  console.log(acc);
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
   labelBalance.textContent = `${acc.balance}€`;
 };
@@ -138,7 +149,7 @@ createUsernames(accounts);
 
 const updateUI = function (acc) {
   //Display movements
-  displayMovements(acc.movements);
+  displayMovements(acc);
 
   //Display balance
   calcDisplayBalance(acc);
@@ -151,20 +162,13 @@ const updateUI = function (acc) {
 
 let currentAccount;
 
-//FAKE ALWAYS LOGGED IN
-currentAccount = account1;
-updateUI(currentAccount);
-containerApp.style.opacity = 100;
+// //FAKE ALWAYS LOGGED IN
+// currentAccount = account1;
+// updateUI(currentAccount);
+// containerApp.style.opacity = 100;
 
 //Dates
-const dateNow = new Date();
-const day = `${dateNow.getDate()}`.padStart(2, '0');
-const month = `${dateNow.getMonth() + 1}`.padStart(2, '0');
-const year = dateNow.getFullYear();
-const hour = dateNow.getHours();
-const min = dateNow.getMinutes();
 
-labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
 btnLogin.addEventListener('click', function (e) {
   //Prevent form from submiting
   e.preventDefault();
@@ -178,6 +182,15 @@ btnLogin.addEventListener('click', function (e) {
       currentAccount.owner.split(' ')[0]
     }`;
     containerApp.style.opacity = 100;
+
+    // Create current date and time
+    const dateNow = new Date();
+    const day = `${dateNow.getDate()}`.padStart(2, '0');
+    const month = `${dateNow.getMonth() + 1}`.padStart(2, '0');
+    const year = dateNow.getFullYear();
+    const hour = dateNow.getHours();
+    const min = dateNow.getMinutes();
+    labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
 
     // Clear input fields and remove focus on the field
     inputLoginUsername.value = inputLoginPin.value = '';
@@ -195,6 +208,7 @@ btnLogin.addEventListener('click', function (e) {
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault(); // Prevent default submiting
   const amount = Number(inputTransferAmount.value);
+  const currentTime = new Date();
   const receiverAcc = accounts.find(
     acc => acc.username === inputTransferTo.value
   );
@@ -212,6 +226,10 @@ btnTransfer.addEventListener('click', function (e) {
 
     // WITHDRAWAL to the array of account from where we sent
     currentAccount.movements.push(-amount);
+
+    // ADD transfer date
+    currentAccount.movementsDates.push(currentTime);
+    receiverAcc.movementsDates.push(currentTime);
 
     // Update UI
     updateUI(currentAccount);
@@ -268,7 +286,7 @@ let sorted = false;
 btnSort.addEventListener('click', function (e) {
   e.preventDefault();
 
-  dispayMovements(currentAccount.movements, !sorted);
+  displayMovements(currentAccount.movements, !sorted);
   sorted = !sorted; //Using for change movement (sorted / non sorted)
 });
 
