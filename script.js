@@ -373,7 +373,7 @@ btnSort.addEventListener('click', function (e) {
 // console.log(Math.round(23.9)); // Result: 24
 
 // console.log(Math.trunc(-23.3)); // Result: 24
-// console.log(Math.floor(-23.3)); // Result: 24 better optiom
+// console.log(Math.floor(-23.3)); // Result: 24 better option
 
 // // Rounding decimals
 // console.log((2.7).toFixed(0)); // Result: 3
@@ -452,18 +452,12 @@ btnSort.addEventListener('click', function (e) {
 const bornDay = new Date(1995, 1, 7, 10, 10);
 const today = new Date();
 
-// const mS = today.getTime() - bornDay.getTime();
-// const years = mS / (365 * 24 * 60 * 60 * 1000);
-// console.log(bornDay);
-// console.log(today);
-// console.log(years);
-
-// Other way
-
-const dayPassed = function (bornDay, today) {
+// Example
+const calcDayPassed = function (bornDay, today) {
   const ms = today.getTime() - bornDay.getTime();
   const days = ms / (24 * 60 * 60 * 1000);
-  return days;
+  const years = Math.floor(days / 365);
+  return years;
 };
 
-console.log(dayPassed(bornDay, today));
+console.log(calcDayPassed(bornDay, today)); // Result: 28
