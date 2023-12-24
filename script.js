@@ -5,8 +5,8 @@ const account1 = {
   pin: 1111,
 
   movementsDates: [
-    '2019-11-18T21:31:17.178Z',
-    '2019-12-23T07:42:02.383Z',
+    '2023-11-18T21:31:17.178Z',
+    '2023-12-23T07:42:02.383Z',
     '2020-01-28T09:15:04.904Z',
     '2020-04-01T10:17:24.185Z',
     '2020-05-08T14:11:59.604Z',
@@ -67,6 +67,29 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 ////////////////////////////////////////
+
+// Date function
+
+const formatMovementsDate = displayDate => {
+  const calcDaysPassed = (dayOfMovement, today) => {
+    const ms = today.getTime() - dayOfMovement.getTime();
+    const days = Math.round(ms / (24 * 60 * 60 * 1000));
+    return days;
+  };
+  const daysPassed = calcDaysPassed(displayDate, new Date());
+  console.log(daysPassed);
+  if (daysPassed < 1) return 'Today';
+  if (daysPassed < 2) return 'Yesterday';
+  if (daysPassed <= 7) return `${daysPassed} days ago`;
+  else {
+    const day = `${displayDate.getDate()}`.padStart(2, '0');
+    const month = `${displayDate.getMonth() + 1}`.padStart(2, '0');
+    const year = displayDate.getFullYear();
+    const dateOfMovement = `${day}/${month}/${year}`;
+    return dateOfMovement;
+  }
+};
+
 // Create DOM Elements
 
 //Creat function for Display Movementrs
@@ -83,16 +106,14 @@ const displayMovements = function (acc, sort = false) {
 
     //Display date in movements
     const displayDate = new Date(acc.movementsDates[i]);
-    const day = `${displayDate.getDate()}`.padStart(2, '0');
-    const month = `${displayDate.getMonth() + 1}`.padStart(2, '0');
-    const year = displayDate.getFullYear();
+    const dateOfMovement = formatMovementsDate(displayDate);
 
     const html = `
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-        <div class="movements__date">${day}/${month}/${year}</div>
+        <div class="movements__date">${dateOfMovement}</div>
         <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>`;
 
@@ -102,7 +123,6 @@ const displayMovements = function (acc, sort = false) {
 // Calculating and print balance
 
 const calcDisplayBalance = function (acc) {
-  console.log(acc);
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
   labelBalance.textContent = `${acc.balance}€`;
 };
@@ -447,17 +467,16 @@ btnSort.addEventListener('click', function (e) {
 
 ///////////////////////////////////////
 
-// Operation with dates
+// // Operation with dates
 
-const bornDay = new Date(1995, 1, 7, 10, 10);
-const today = new Date();
+// const bornDay = new Date(1995, 1, 7, 10, 10);
+// const today = new Date();
 
-// Example
-const calcDayPassed = function (bornDay, today) {
-  const ms = today.getTime() - bornDay.getTime();
-  const days = ms / (24 * 60 * 60 * 1000);
-  const years = Math.floor(days / 365);
-  return years;
-};
+// // Example
+// const calcDayPassed = function (bornDay, today) {
+//   const ms = today.getTime() - bornDay.getTime();
+//   const days = ms / (24 * 60 * 60 * 1000);
+//   return days;
+// };
 
-console.log(calcDayPassed(bornDay, today)); // Result: 28
+// console.log(calcDayPassed(bornDay, today)); //
